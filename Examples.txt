@@ -1,0 +1,10 @@
+Examples:
+Tautology:
+(p I q) E (Np D q) 
+p D Np
+
+Not tautology:
+(p C (p I q)) D q
+p C (q D Nq)
+
+
