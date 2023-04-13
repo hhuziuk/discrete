@@ -6,16 +6,21 @@ function checkEquivalenceRelation(X, relation) {
     let isTransitive = true;
 
     for (let x of X) {
+        // перевіряє, чи містить елемент відношення пару з самим собою (за допомогою методу Set.has()).
+        // Якщо ні, то відношення не є рефлексивним, тобто на діагоналі матриці відношення є пропуски.
         if (!(x in relation) || !relation[x].has(x)) {
             isReflexive = false;
         }
         for (let y of X) {
-            if ((x in relation) && (y in relation) && (relation[x].has(y)) && !relation[y].has(x)) {
+            // перебирає всі елементи відношення знову і порівнює їх пари. Умова перевіряє, чи є відповідні пари (x, y) та
+            // (y, x) відносно елементів x та y. Якщо ні, то відношення не є симетричним.
+            if ((x in relation) && (relation[x].has(y)) && (!(y in relation) || !relation[y].has(x))) {
                 isSymmetric = false;
             }
             for (let z of X) {
-                if ((x in relation) && (y in relation) && (z in relation) &&
-                    (relation[x].has(y)) && (relation[y].has(z)) && !(relation[x].has(z))) {
+                // перевіряє транзитивність відношення. Він перебирає всі елементи відношення та шукає такі пари (x, y) та (y, z),
+                // щоб також була пара (x, z). Якщо ні, то відношення не є транзитивним.
+                if ((x in relation) && (y in relation) && (relation[x].has(y)) && (relation[y].has(z)) && (!(x in relation) || !relation[x].has(z))) {
                     isTransitive = false;
                 }
             }
@@ -54,6 +59,5 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
         relation[x].add(y);
     }
 
-    // Call the function
     checkEquivalenceRelation(X, relation);
 });
